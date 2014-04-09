@@ -1,0 +1,164 @@
+﻿<UserControl x:Class="Org.Filedrops.FileSystem.UI.Listview.FiledropsFileList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:Org.Filedrops.FileSystem.UI.Listview"
+			 xmlns:System="clr-namespace:System;assembly=mscorlib"
+			 mc:Ignorable="d"
+			 d:DesignHeight="300" d:DesignWidth="300">
+
+	<UserControl.Resources>
+        
+        <Style x:Key="ExtensionBlock" TargetType="{x:Type TextBlock}">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Path=ShowFileExtensions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="true">
+					<Setter Property="Text" Value="{Binding Path=Name}" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=ShowFileExtensions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="false">
+					<Setter Property="Text" Value="{Binding Path=NameWithoutExtension}" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="ExtensionBox" TargetType="{x:Type TextBox}">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Path=ShowFileExtensions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="true">
+					<Setter Property="Text" Value="{Binding Path=Name}" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=ShowFileExtensions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="false">
+					<Setter Property="Text" Value="{Binding Path=NameWithoutExtension}" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+		
+		<Style x:Key="RenamerBlock" TargetType="TextBlock" BasedOn="{StaticResource ExtensionBlock}">
+			<Style.Triggers>
+				<MultiDataTrigger>
+					<MultiDataTrigger.Conditions>
+						<Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" Value="False" />
+						<Condition Binding="{Binding Path=InEditMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="True" />
+					</MultiDataTrigger.Conditions>
+					<Setter Property="Height" Value="Auto" />
+					<Setter Property="Width" Value="Auto" />
+				</MultiDataTrigger>
+				<MultiDataTrigger>
+					<MultiDataTrigger.Conditions>
+						<Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" Value="True" />
+						<Condition Binding="{Binding Path=InEditMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="True" />
+					</MultiDataTrigger.Conditions>
+					<Setter Property="Height" Value="0" />
+					<Setter Property="Width" Value="0" />
+				</MultiDataTrigger>
+				<DataTrigger Binding="{Binding Path=InEditMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="False">
+					<Setter Property="Height" Value="Auto" />
+					<Setter Property="Width" Value="Auto" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+
+		<Style x:Key="RenamerBox" TargetType="TextBox" BasedOn="{StaticResource ExtensionBox}">
+			<Style.Triggers>
+				<MultiDataTrigger>
+					<MultiDataTrigger.Conditions>
+						<Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" Value="False" />
+						<Condition Binding="{Binding Path=InEditMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="True" />
+					</MultiDataTrigger.Conditions>
+					<Setter Property="Height" Value="0" />
+					<Setter Property="Width" Value="0" />
+				</MultiDataTrigger>
+				<MultiDataTrigger>
+					<MultiDataTrigger.Conditions>
+						<Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" Value="True" />
+						<Condition Binding="{Binding Path=InEditMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="True" />
+					</MultiDataTrigger.Conditions>
+					<Setter Property="Height" Value="Auto" />
+					<Setter Property="Width" Value="Auto" />
+				</MultiDataTrigger>
+				<DataTrigger Binding="{Binding Path=InEditMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="False">
+					<Setter Property="Height" Value="0" />
+					<Setter Property="Width" Value="0" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+
+		<GridView x:Key="detailsView" x:Shared="False">
+			<GridViewColumn Header="Name" Width="200">
+				<GridViewColumn.CellTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<Image Width="16" Height="16" Source="{Binding Path=Icon32x32}" />
+							<TextBlock Margin="5,0,0,0" Style="{StaticResource RenamerBlock}" />
+							<TextBox Margin="5,0,0,0" Style="{StaticResource RenamerBox}" LostFocus="renamer_LostFocus" KeyDown="renamer_Enter"/>
+						</StackPanel>
+					</DataTemplate>
+				</GridViewColumn.CellTemplate>
+			</GridViewColumn>
+			<GridViewColumn Header="Extension" Width="Auto" DisplayMemberBinding="{Binding Path=Extension}" />
+		</GridView>
+
+		<ItemsPanelTemplate x:Key="horizontalWrapPanel">
+			<WrapPanel Orientation="Horizontal" />
+		</ItemsPanelTemplate>
+		<ItemsPanelTemplate x:Key="verticalWrapPanel">
+			<WrapPanel Orientation="Vertical" />
+		</ItemsPanelTemplate>
+
+		<DataTemplate x:Key="Tiled" x:Shared="False">
+			<StackPanel Width="90" Height="120">
+				<Grid Width="80" Height="80" HorizontalAlignment="Center">
+					<Image Source="{Binding Path=Icon64x64}" Margin="2,2,2,5"/>
+				</Grid>
+				<TextBlock Style="{StaticResource RenamerBlock}" FontSize="13" 
+               HorizontalAlignment="Center" Margin="5,0,0,1" TextWrapping="Wrap" />
+				<TextBox FontSize="13" 
+               HorizontalAlignment="Center" Margin="5,0,0,1" TextWrapping="Wrap"
+						 Style="{StaticResource RenamerBox}" LostFocus="renamer_LostFocus" KeyDown="renamer_Enter"/>
+				
+			</StackPanel>
+		</DataTemplate>
+		
+		<DataTemplate x:Key="List" x:Shared="False">
+			<StackPanel Orientation="Horizontal" Height="20">
+				<Image Source="{Binding Path=Icon48x48}" Margin="0,0,6,0"/>
+				<TextBlock Style="{StaticResource RenamerBlock}" FontSize="13" 
+               HorizontalAlignment="Center" Margin="5,0,0,1" TextWrapping="Wrap" />
+				<TextBox FontSize="13" 
+               HorizontalAlignment="Center" Margin="5,0,0,1" TextWrapping="Wrap"
+						 Style="{StaticResource RenamerBox}" LostFocus="renamer_LostFocus" KeyDown="renamer_Enter"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<Style x:Key="tiledContainerStyle" TargetType="ListViewItem">
+			<Setter Property="ContentTemplate" Value="{StaticResource Tiled}" />
+		</Style>
+
+		<Style x:Key="listContainerStyle" TargetType="ListViewItem">
+			<Setter Property="ContentTemplate" Value="{StaticResource List}" />
+		</Style>
+
+		<Style x:Key="viewStyle" TargetType="{x:Type ListView}">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Layout, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="{x:Static local:FiledropsFileListLayout.BigIcons}">
+					<Setter Property="ItemContainerStyle" Value="{StaticResource tiledContainerStyle}" />
+					<Setter Property="View" Value="{x:Null}" />
+					<Setter Property="ItemsPanel" Value="{StaticResource horizontalWrapPanel}" />
+					<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Layout, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="{x:Static local:FiledropsFileListLayout.List}">
+					<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible" />
+					<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+					<Setter Property="ItemsPanel" Value="{StaticResource verticalWrapPanel}" />
+					<Setter Property="View" Value="{x:Null}" />
+					<Setter Property="ItemContainerStyle" Value="{StaticResource listContainerStyle}" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Layout, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="{x:Static local:FiledropsFileListLayout.Details}">
+					<Setter Property="View" Value="{StaticResource detailsView}" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+	</UserControl.Resources>
+
+	<Grid>
+		<ListView Name="viewComponent" Style="{StaticResource ResourceKey=viewStyle}" />
+	</Grid>
+</UserControl>

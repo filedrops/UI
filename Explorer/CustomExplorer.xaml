@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Org.Filedrops.FileSystem.UI.Explorer.CustomExplorer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:list ="clr-namespace:Org.Filedrops.FileSystem.UI.Listview"
+			 xmlns:tree="clr-namespace:Org.Filedrops.FileSystem.UI.FileTreeView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5" VerticalAlignment="Center">
+			<CheckBox Content="show extensions" Margin="5" Name="extensions" Checked="extensions_Checked" Unchecked="extensions_Unchecked" />
+			<CheckBox Content="show folders"    Margin="5" Name="folders"    Checked="folders_Checked" Unchecked="folders_Unchecked" />
+			<ComboBox							Margin="5" Name="layout"	  SelectionChanged="layout_SelectionChanged">
+				<ComboBoxItem>BigIcons</ComboBoxItem>
+				<ComboBoxItem IsSelected="True">Details</ComboBoxItem>
+				<ComboBoxItem>List</ComboBoxItem>
+			</ComboBox>
+		</StackPanel>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+
+			<tree:FileTree x:Name="TreeDisplay" ShowFiles="False" Grid.Column="0"/>
+			<GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" ShowsPreview="true" Width="5" />
+			<list:FiledropsFileList x:Name="ListDisplay" Layout="Details" ShowFileExtensions="False" ShowFolders="False" Grid.Column="2" 
+								RootDirectory="{Binding ElementName=TreeDisplay, Path=SelectedFileSystemEntry, Mode=TwoWay}" />
+		</Grid>
+	</DockPanel>
+</UserControl>
