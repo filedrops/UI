@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Filedrops.FileSystem.UI</id>
+        <version>1.0.0</version>
+        <title>Filedrops FileSystem UI</title>
+        <authors>xplore+</authors>
+        <owners>xplore+</owners>
+        <projectUrl>https://github.com/filedrops/UI</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Filedrops FileSystem UI</description>
+        <copyright>xplore+ 2013</copyright>
+        <tags>filedrops, filesystem, ui</tags>
+        <dependencies>
+            <dependency id="Filedrops.FileSystem" version="1.0.0" />
+            <dependency id="ModernImageLibrary" version="1.0.0" />
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="WindowsBase" targetFramework="" />
+            <frameworkAssembly assemblyName="PresentationCore" targetFramework="" />
+            <frameworkAssembly assemblyName="PresentationFramework" targetFramework="" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="Filedrops.FileSystem.UI.dll" target="Filedrops.FileSystem.UI.dll" />
+    </files>
+</package>
